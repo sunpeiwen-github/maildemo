@@ -74,10 +74,22 @@ export default {
     },
     methods: {
         loadMails() {
-            var _this = this
-            this.$axios.get('/mails').then(resp => {
+            // var _this = this
+            // this.$axios.get('/mails').then(resp => {
+            //     if (resp && resp.status === 200) {
+            //         _this.mails = resp.data
+            //     }
+            // })
+
+               //接收测试
+               var _this = this
+            //使用全局变量
+          console.log('inbox')
+          console.log(this.$root.userAddress)
+            this.$axios.post('/receive', encodeURIComponent(this.$root.userAddress) ).then(resp => {
                 if (resp && resp.status === 200) {
-                    _this.mails = resp.data
+                     _this.mails = resp.data
+                    console.log('ok了2')
                 }
             })
         },

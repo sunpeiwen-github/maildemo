@@ -16,18 +16,20 @@
 </template>
   
 <script>
+import App from '../App.vue';
 
 export default {
   name: 'Login',
   data() {
     return {
       loginForm: {//默认值
-        address: '123@163.com',
-        password: '123'
+        address: '1143784998@qq.com',
+        password: 'vqpgnvvehqkmhcfh'
       },
       responseResult: []
     }
   },
+  // components:{App},
   methods: {
     login() {
       var _this = this
@@ -40,6 +42,12 @@ export default {
         .then(successResponse => {
           if (successResponse.data.code === 200) {
             // var data = this.loginForm
+
+         //全局变量
+         this.$root.userAddress=_this.loginForm.address
+            console.log('login')
+            console.log(this.$root.userAddress)
+
             _this.$store.commit('login', _this.loginForm)
             var path = this.$route.query.redirect
             this.$router.replace({ path: path === '/' || path === undefined ? '/index' : path })
