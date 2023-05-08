@@ -1,5 +1,29 @@
 <template>
-    <div>
+    <div class="container">
+
+        <el-row style="width: 100%">
+            <el-col :span="4"><!--                删除按钮-->
+                <el-button type="primary">删除</el-button></el-col>
+
+            <el-col :span="4">   
+                <template>
+                    <el-select v-model="value" placeholder="移动到">
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                    </el-select>
+                </template>  
+            </el-col>
+                <!--选择器-->
+            <el-col :span="4">
+               
+            </el-col>
+            <el-col :span="4"></el-col>
+            <!-- <el-col :span="4"></el-col> -->
+            <el-col :span="8">
+              
+             </el-col>
+        </el-row>
+
         <!--  表格-->
         <el-table ref="multipleTable" :data="mails" tooltip-effect="dark" style="width: 100%" @row-click="handle"
             @selection-change="handleSelectionChange">
@@ -13,9 +37,10 @@
             </el-table-column>
         </el-table>
 
-        <MailContent v-if="showMail" :mail="selectedMail"></MailContent>
-
-
+        <el-dialog title="邮件内容" :visible.sync="dialogVisible">
+            <mail-content :mail="selectedMail"></mail-content>
+        </el-dialog>
+        <!-- <MailContent v-if="showMail" :mail="selectedMail"></MailContent> -->
     </div>
 </template>
 
@@ -69,6 +94,7 @@ export default {
             //控制MailContent组件显示
             showMail: false,
             selectedMail: null,
+            dialogVisible: false,
         }
 
     },
@@ -81,14 +107,14 @@ export default {
             //     }
             // })
 
-               //接收测试
-               var _this = this
+            //接收测试
+            var _this = this
             //使用全局变量
-          console.log('inbox')
-          console.log(this.$root.userAddress)
-            this.$axios.post('/receive', encodeURIComponent(this.$root.userAddress) ).then(resp => {
+            console.log('inbox')
+            console.log(this.$root.userAddress)
+            this.$axios.post('/inbox', encodeURIComponent(this.$root.userAddress)).then(resp => {
                 if (resp && resp.status === 200) {
-                     _this.mails = resp.data
+                    _this.mails = resp.data
                     console.log('ok了2')
                 }
             })
@@ -110,23 +136,8 @@ export default {
         //单机表格的一行后 进入mail页面
         handle(row) {
             this.selectedMail = row
-            this.showMail = true
-
-            // console.log('hh')
-            // console.log(row)
-            // this.selectedMail = row
-            // this.$router.push({ name: 'MailContent', params: { id: row.id } })
-        },
-        //通过provide方法注入一个名为getTableInstance的方法
-        // provide() {
-        //     console.log("Debug information provide");
-
-        //     return {
-        //         getTableInstance: () => this
-        //     };
-        // },
-
-
+            this.dialogVisible = true
+        }
     },
 
     mounted: function () {
@@ -136,5 +147,15 @@ export default {
 
 }
 </script>
+<style>
+.container {
+    display: flex;
+    flex-direction: column;
+}
+.el-row{
+    display:flex;
+    flex-wrap: wrap;
+}
 
-<style></style>
+</style>
+
