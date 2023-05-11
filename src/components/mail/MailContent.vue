@@ -47,6 +47,22 @@ export default {
     props: {
         mail: Object
     },
+    data(){
+        return {
+             //选择框
+             options: [{
+                value: '选项1',
+                label: '收信箱'
+            }, {
+                value: '选项2',
+                label: '发送'
+            }, {
+                value: '选项3',
+                label: '草稿箱'
+            }],
+            value: '',
+        }
+    },
 
 //计算属性可以动态响应
     // computed: {

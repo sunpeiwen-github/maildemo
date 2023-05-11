@@ -3,25 +3,25 @@
 
         <el-row style="width: 100%">
             <el-col :span="4"><!--                删除按钮-->
-                <el-button type="primary">删除</el-button></el-col>
+                <el-button type="primary" @click="deleteMails">删除</el-button></el-col>
 
-            <el-col :span="4">   
-                <template>
+            <el-col :span="4">
+                <!-- <template>
                     <el-select v-model="value" placeholder="移动到">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                     </el-select>
-                </template>  
+                </template> -->
             </el-col>
-                <!--选择器-->
+            <!--选择器-->
             <el-col :span="4">
-               
+
             </el-col>
             <el-col :span="4"></el-col>
             <!-- <el-col :span="4"></el-col> -->
             <el-col :span="8">
-              
-             </el-col>
+
+            </el-col>
         </el-row>
 
         <!--  表格-->
@@ -29,7 +29,7 @@
             @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55">
             </el-table-column>
-            <el-table-column prop="recipientName" label="来信人" align="center">
+            <el-table-column prop="fromName" label="来信人" align="center">
             </el-table-column>
             <el-table-column prop="subject" label="标题" align="center">
             </el-table-column>
@@ -115,7 +115,7 @@ export default {
             this.$axios.post('/inbox', encodeURIComponent(this.$root.userAddress)).then(resp => {
                 if (resp && resp.status === 200) {
                     _this.mails = resp.data
-                    console.log('ok了2')
+                    // console.log(_this.mails)
                 }
             })
         },
@@ -137,6 +137,28 @@ export default {
         handle(row) {
             this.selectedMail = row
             this.dialogVisible = true
+        },
+        deleteMails() {
+            console.log('delete')
+
+//删除前端界面中的邮件
+            for (let i = this.multipleSelection.length - 1; i >= 0; i--) {
+                //删除 索引位置 1个
+                // this.mails.splice(this.mails.findIndex(this.multipleSelection[i]), 1);
+                this.mails.splice(this.mails.findIndex(item => item === this.multipleSelection[i]), 1);
+
+            }
+       
+
+
+            this.$axios.post('/delete', this.multipleSelection).then(resp => {
+                if (resp && resp.status === 200) {
+
+                    console.log('delete ok')
+                }
+            })
+
+
         }
     },
 
@@ -152,10 +174,10 @@ export default {
     display: flex;
     flex-direction: column;
 }
-.el-row{
-    display:flex;
+
+.el-row {
+    display: flex;
     flex-wrap: wrap;
 }
-
 </style>
 
